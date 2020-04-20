@@ -3,6 +3,7 @@ package rewards;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import rewards.CaptureSystemOutput.OutputCapture;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = { DbExceptionTestConfig.class })
+@EnableAutoConfiguration
 public class DBExceptionHandlingAspectTests {
 
     @Autowired
@@ -30,11 +32,10 @@ public class DBExceptionHandlingAspectTests {
 
         // TODO-12: (Optional) Validate our AOP is working.
         //
-        // An error message should now be logged to the console as a warning
-        //
-        // Save all your work and run this test - it should pass with a warning
-        // message on the console AND the console output assertion (below)
-        // should succeed.
+        // - An error message should now be logged to the console as a warning
+        // - Save all your work and run this test - it should pass with a warning
+        //   message on the console AND the console output assertion (below)
+        //   should succeed.
 
         if (TestConstants.CHECK_CONSOLE_OUTPUT) {
             assertThat(capture.toString(), containsString(DBExceptionHandlingAspect.EMAIL_FAILURE_MSG));

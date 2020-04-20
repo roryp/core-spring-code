@@ -23,7 +23,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureDataJpa
 @WebMvcTest(AccountController.class)
 @ContextConfiguration(classes = {RestWsApplication.class, SecurityConfig.class})
-public class AccountControllerWithNewUsersTests {
+public class AccountControllerCustomAuthenticationProviderTests {
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,25 +35,8 @@ public class AccountControllerWithNewUsersTests {
     private AccountService accountService;
 
     @Test
-    @WithMockUser(username = "joe", password = "joe")
-    public void accountDetails_with_joe_credentials_should_return_200() throws Exception {
-
-        // arrange
-        given(accountManager.getAccount(0L)).willReturn(new Account("1234567890", "John Doe"));
-
-        // act and assert
-        mockMvc.perform(get("/accounts/0")).andExpect(status().isOk())
-               .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-               .andExpect(jsonPath("name").value("John Doe")).andExpect(jsonPath("number").value("1234567890"));
-
-        // verify
-        verify(accountManager).getAccount(0L);
-
-    }
-
-    @Test
-    @WithMockUser(username = "mary", password = "mary")
-    public void accountDetails_with_mary_credentials_should_return_200() throws Exception {
+    @WithMockUser(username = "spring", password = "spring")
+    public void accountDetails_with_spring_credentials_should_return_200() throws Exception {
 
         // arrange
         given(accountManager.getAccount(0L)).willReturn(new Account("1234567890", "John Doe"));

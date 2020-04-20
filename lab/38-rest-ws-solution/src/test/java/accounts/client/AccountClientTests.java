@@ -14,10 +14,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountClientTests {
-	
-	/**
-	 * server URL ending with the servlet mapping on which the application can be reached.
-	 */
+
 	private static final String BASE_URL = "http://localhost:8080";
 	
 	private RestTemplate restTemplate = new RestTemplate();
@@ -28,7 +25,6 @@ public class AccountClientTests {
 		String url = BASE_URL + "/accounts";
 		// we have to use Account[] instead of List<Account>, or Jackson won't know what type to unmarshal to
 		Account[] accounts = restTemplate.getForObject(url, Account[].class);
-		System.out.println(accounts.length);
 		assertTrue(accounts.length >= 21, "Expected 21 accounts, but found " + accounts.length);
 		assertEquals("Keith and Keri Donald", accounts[0].getName());
 		assertEquals(2, accounts[0].getBeneficiaries().size());

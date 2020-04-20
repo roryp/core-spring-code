@@ -41,6 +41,7 @@ public class AccountClientTests {
         ResponseEntity<Account[]> responseEntity
                 = restTemplate.withBasicAuth("user", "user")
                               .getForEntity("/accounts", Account[].class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         Account[] accounts = responseEntity.getBody();
         assertThat(accounts.length >= 21).withFailMessage("Expected 21 accounts, but found " + accounts.length).isTrue();
         assertThat(accounts[0].getName()).isEqualTo("Keith and Keri Donald");
@@ -55,6 +56,7 @@ public class AccountClientTests {
         ResponseEntity<Account[]> responseEntity
                 = restTemplate.withBasicAuth("admin", "admin")
                               .getForEntity("/accounts", Account[].class);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         Account[] accounts = responseEntity.getBody();
         assertThat(accounts.length >= 21).withFailMessage("Expected 21 accounts, but found " + accounts.length).isTrue();
         assertThat(accounts[0].getName()).isEqualTo("Keith and Keri Donald");
@@ -68,6 +70,7 @@ public class AccountClientTests {
         ResponseEntity<Account> responseEntity
                 = restTemplate.withBasicAuth("user", "user")
                               .getForEntity(url, Account.class, 0);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         Account account = responseEntity.getBody();
         assertThat(account.getName()).isEqualTo("Keith and Keri Donald");
         assertThat(account.getBeneficiaries().size()).isEqualTo(2);
@@ -116,9 +119,9 @@ public class AccountClientTests {
         restTemplate.withBasicAuth("superadmin", "superadmin").delete(newBeneficiaryLocation);
 
         // use exchange method to receive a 404 response
-        ResponseEntity<Account> response =
+        ResponseEntity<Beneficiary> response =
                 restTemplate.withBasicAuth("superadmin", "superadmin")
-                            .getForEntity(newBeneficiaryLocation, Account.class);
+                            .getForEntity(newBeneficiaryLocation, Beneficiary.class);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }

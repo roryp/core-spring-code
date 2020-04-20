@@ -21,11 +21,12 @@ import java.util.List;
  * A controller handling requests for CRUD operations on Accounts and their
  * Beneficiaries.
  *
- * TODO-12: The application should have restarted by now.
- *  - Access the metrics endpoint, the new metric should be visible.
- *  - Fetch some accounts using the REST API, then view the counter value
- *    at  http://localhost:8080/actuator/metrics/account.fetch
- *  - Restart the application. What happens to the counter?
+ * TODO-11: Access the new "/metrics/account.fetch" metric
+ * - Let the application get restarted via devtools
+ * - Access "/metrics" endpoint, and verify the presence of "account.fetch" metric
+ * - Access some accounts (i.e. http://localhost:8080/accounts/1)
+ * - View the counter value at http://localhost:8080/actuator/metrics/account.fetch
+ * - Restart the application. What happens to the counter?
  */
 @RestController
 public class AccountController {
@@ -34,11 +35,10 @@ public class AccountController {
 
 	private AccountManager accountManager;
 
-	// TODO-09: Add a Counter and initialize it via the constructor
-	// - You will need to inject a MeterRegistry
-	// - Call the counter "account.fetch" with a tag of "type"/"fromCode" key/value pair
-	//   (In the "Extra credit" exercise later on, you will create "account.fetch"
-	//   counter with a tag of "type"/"fromAspect" key/value pair.)
+	// TODO-08: Add a Micrometer Counter
+	// - Inject a MeterRegistry through constructor injection
+	// - Create the counter from the MeterRegistry
+	// - Name the counter "account.fetch" with a tag of "type"/"fromCode" key/value pair
 
 	/**
 	 * Creates a new AccountController with a given account manager.
@@ -50,16 +50,11 @@ public class AccountController {
 
 	/**
 	 * Provide a list of all accounts.
-     *
-     * TODO-06: Change log level via ./actuator/loggers endpoint
-     * - Add logger.debug("Logging message within accountSummary()");
-     * - Change logging level of accounts.web package as described in the lab document
 	 *
-     * TODO-13: Add Timer metric using @Timed annotation
-     * -Set the metric name to "account.timer"
-     * -Set a extra tag with "source"/"accountSummary" key/value pair
-     *
-	 * TODO-25 (Extra credit): Use annotation and AOP for counter (Read lab document)
+     * TODO-12: Add Timer metric
+	 * - Add @Timed annotation to this method
+     * - Set the metric name to "account.timer"
+     * - Set a extra tag with "source"/"accountSummary" key/value pair
 	 */
 	@GetMapping(value = "/accounts")
 	public List<Account> accountSummary() {
@@ -67,16 +62,20 @@ public class AccountController {
 	}
 
 	/**
-	 * Provide the details of an account with the given id.
 	 *
-	 * TODO-10: Increment the Counter each time this method is called.
-     *
-     * TODO-14: Add Timer metric using @Timed annotation
-     * -Set the metric name to "account.timer"
-     * -Set a extra tag with "source"/"accountDetails" key/value pair
+	 *  TODO-09: Increment the Counter each time this method is called.
+     *  - Add code to increment the counter
+	 *
+	 * ----------------------------------------------------
+	 *
+     *  TODO-13: Add Timer metric
+	 *  - Add @Timed annotation to this method
+     *  - Set the metric name to "account.timer"
+     *  - Set a extra tag with "source"/"accountDetails" key/value pair
 	 */
 	@GetMapping(value = "/accounts/{id}")
 	public Account accountDetails(@PathVariable int id) {
+
 		return retrieveAccount(id);
 	}
 
@@ -85,7 +84,6 @@ public class AccountController {
 	 * response.
 	 */
 	@PostMapping(value = "/accounts")
-	@ResponseStatus(HttpStatus.CREATED) // 201
 	public ResponseEntity<Void> createAccount(@RequestBody Account newAccount) {
 		Account account = accountManager.save(newAccount);
 
@@ -107,7 +105,6 @@ public class AccountController {
 	 * setting its URL as the Location header on the response.
 	 */
 	@PostMapping(value = "/accounts/{accountId}/beneficiaries")
-	@ResponseStatus(HttpStatus.CREATED) // 201
 	public ResponseEntity<Void> addBeneficiary(@PathVariable long accountId, @RequestBody String beneficiaryName) {
 		accountManager.addBeneficiary(accountId, beneficiaryName);
 		return entityWithLocation(beneficiaryName);

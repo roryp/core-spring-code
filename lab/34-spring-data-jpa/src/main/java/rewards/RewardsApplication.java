@@ -1,23 +1,20 @@
 package rewards;
 
+import config.RewardsConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 // TODO-01: Review dependency as described in the TO-DO-01 
 //          in the pom.xml or build.gradle 
-//
-// TODO-07: Configure JPA as specified in the TO-DO-07 in the
-//          src/test/resources/application.properties
 
 @SpringBootApplication
-@ComponentScan("config")
+@Import(RewardsConfig.class)
 public class RewardsApplication {
 	private final Logger logger = LoggerFactory.getLogger(RewardsApplication.class);
 
@@ -30,8 +27,11 @@ public class RewardsApplication {
 	@Component
 	public final class QueryAccountCountRunner implements CommandLineRunner {
 
-		@Autowired
 		private JdbcTemplate jdbcTemplate;
+
+		public QueryAccountCountRunner(JdbcTemplate jdbcTemplate) {
+			this.jdbcTemplate = jdbcTemplate;
+		}
 
 		@Override
 		public void run(String... args) throws Exception {
@@ -40,3 +40,6 @@ public class RewardsApplication {
 		}
 	}
 }
+
+// TODO-07: Configure JPA as specified in the TO-DO-07 in the
+//          src/test/resources/application.properties

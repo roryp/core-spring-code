@@ -1,6 +1,5 @@
 package accounts.client;
 
-import accounts.BootTestSolutionApplication;
 import common.money.Percentage;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +16,6 @@ import java.util.Random;
 
 import static org.assertj.core.api.Assertions.*;
 
-/**
- * Test the Account Server by running this test as a REST client. Run
- * {@link BootTestSolutionApplication} first or these tests will fail.
- */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class AccountClientTests {
 
@@ -70,7 +65,7 @@ public class AccountClientTests {
 
 	@Test
 	public void addAndDeleteBeneficiary() {
-		// perform both add and delete to avoid issues with side effects
+
 		String addUrl = "/accounts/{accountId}/beneficiaries";
 		URI newBeneficiaryLocation = restTemplate.postForLocation(addUrl, "David", 1);
 		Beneficiary newBeneficiary = restTemplate.getForObject(newBeneficiaryLocation, Beneficiary.class);
@@ -78,9 +73,8 @@ public class AccountClientTests {
 
 		restTemplate.delete(newBeneficiaryLocation);
 
-		// use exchange method to receive a 404 response
-		ResponseEntity<Account> response =
-				restTemplate.getForEntity(newBeneficiaryLocation, Account.class);
+		ResponseEntity<Beneficiary> response =
+				restTemplate.getForEntity(newBeneficiaryLocation, Beneficiary.class);
 
 		assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}

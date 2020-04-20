@@ -15,10 +15,7 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AccountClientTests {
-	
-	/**
-	 * Server URL ending with the servlet mapping on which the application can be reached.
-	 */
+
 	private static final String BASE_URL = "http://localhost:8080";
 	
 	private RestTemplate restTemplate = new RestTemplate();
@@ -27,10 +24,10 @@ public class AccountClientTests {
 	@Test
 	@Disabled
 	public void listAccounts() {
-		//	TODO-03: Remove the @Disabled on this test method.
-		//  - Use the restTemplate to retrieve an array containing all Account instances.
-		//  - Use BASE_URL to help define the URL you need: BASE_URL + "/..."
-		//	- Run the test and ensure that it passes.
+		// TODO-03: Remove the @Disabled on this test method.
+		// - Use the restTemplate to retrieve an array containing all Account instances.
+		// - Use BASE_URL to help define the URL you need: BASE_URL + "/..."
+		// - Run the test and ensure that it passes.
 		Account[] accounts = null; // Modify this line to use the restTemplate
 		
 		assertNotNull(accounts);
@@ -43,9 +40,9 @@ public class AccountClientTests {
 	@Test
 	@Disabled
 	public void getAccount() {
-		//  TODO-05: Remove the @Disabled on this test method.
-		//  - Use the restTemplate to retrieve the Account with id 0 using a URI template
-		//  - Run the test and ensure that it passes.
+		// TODO-05: Remove the @Disabled on this test method.
+		// - Use the restTemplate to retrieve the Account with id 0 using a URI template
+		// - Run the test and ensure that it passes.
 		Account account = null; // Modify this line to use the restTemplate
 		
 		assertNotNull(account);
@@ -106,10 +103,10 @@ public class AccountClientTests {
 		HttpClientErrorException httpClientErrorException = assertThrows(HttpClientErrorException.class, () -> {
 			System.out.println("You SHOULD get the exception \"No such beneficiary with name 'David'\" in the server.");
 
-			//	TODO-16: Try to retrieve the new Beneficiary again.
-			//  - Run this test, it should pass because we expect a 404 Not Found
-			//	  If not, it is likely your delete in the previous step
-			//	  was not successful.
+			// TODO-16: Try to retrieve the new Beneficiary again.
+			// - Run this test, it should pass because we expect a 404 Not Found
+			//   If not, it is likely your delete in the previous step
+			//   was not successful.
 
 		});
 		assertEquals(HttpStatus.NOT_FOUND, httpClientErrorException.getStatusCode());

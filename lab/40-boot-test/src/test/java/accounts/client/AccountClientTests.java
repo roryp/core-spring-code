@@ -18,13 +18,14 @@ import static org.junit.jupiter.api.Assertions.*;
 // - Add @SpringBootTest annotation with WebEnvironment.RANDOM_PORT
 public class AccountClientTests {
 
-	// TODO-02: Autowire TestRestTemplate bean
+	// TODO-02: Autowire TestRestTemplate bean to a field
+	// - Name the field as restTemplate
 
-	// TODO-03: Update code below to use TestRestTemplate (as opposed to RestTmplate)
+	// TODO-03: Update code below to use TestRestTemplate (as opposed to RestTemplate)
 	// - Remove RestTemplate from this code
-	// - Remove BASE_URL from this code
-	// - Run the test and observe that the tests pass except
-	//   `addAndDeleteBeneficiary` test
+	// - Remove BASE_URL from this code or change it to ""
+	// - Run the tests and observe that the they pass except
+	//   "addAndDeleteBeneficiary" test
 
 	/**
 	 * server URL ending with the servlet mapping on which the application can be
@@ -59,7 +60,7 @@ public class AccountClientTests {
 	@Test
 	public void createAccount() {
 		String url = BASE_URL + "/accounts";
-		// use a unique number to avoid conflicts
+		// use a random account number to avoid conflict
 		String number = String.format("12345%4d", random.nextInt(10000));
 		Account account = new Account(number, "John Doe");
 		account.addBeneficiary("Jane Doe");
@@ -75,9 +76,14 @@ public class AccountClientTests {
 		assertThat(retrievedAccount.getEntityId()).isNotNull();
 	}
 
-	// TODO-04: Handle an error status from the server (instead of
-	// handling it as an exception as in the case of RestTemplate)
-	// - Modify the code below as described in the lab document
+	// TODO-04: Modify the code so that it handles 404 HTTP response status
+	// from the server (instead of handling it as an exception as in the
+	// case of RestTemplate)
+	// - Remove the "assertThrows" statement (since you are not going to
+	//   check if an exception is thrown)
+	// - Use "getForEntity" method (instead of "getForObject" method) of
+	//   "TestRestTemplate"
+	// - Check of the HTTP response status
 	// - Run all tests - they should all pass
 	@Test
 	public void addAndDeleteBeneficiary() {
@@ -96,6 +102,6 @@ public class AccountClientTests {
 		assertThat(httpClientErrorException.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
-	// TODO-05: Observe that Tomcat server gets started as part of testing
-	// in the console.
+	// TODO-05: Observe a log message in the console indicating Tomcat started as part of testing
+
 }
